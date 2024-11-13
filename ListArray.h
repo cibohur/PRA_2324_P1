@@ -4,7 +4,7 @@
 using namespace std;
 template <typename T>
 
-i
+
 class ListArray : public List<T> {
 
     private:
@@ -142,4 +142,4 @@ class ListArray : public List<T> {
 
 };
 
-#endif
+

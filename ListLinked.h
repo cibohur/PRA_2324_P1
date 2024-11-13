@@ -19,7 +19,7 @@ class ListLinked : public List<T> {
     ~ListLinked(){
         Node<T>* act = first;
         while(act != nullptr){
-            Node<T>* sig = act->next;
+            Node<T>* next = act->next;
             delete act;
             act = next;
         }
