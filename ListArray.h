@@ -63,7 +63,9 @@ class ListArray : public List<T> {
         	    	throw std::out_of_range("Posición fuera de rango");
         	}
         	T aux  = arr[pos];
-		delete[] arr[pos];
+		for(int i=pos+1; i<n-1; i++){
+			arr[i]=arr[i-1];
+		}	
         	--max;
          return aux;
    	}	
@@ -120,7 +122,7 @@ class ListArray : public List<T> {
 	friend std::ostream& operator<<(std::ostream &out, const ListArray<T> &list){
 
 		 for (int i = 0; i < list.n; ++i) {
-            		out << list.array[i];
+            		out << list.arr[i];
             		if (i < list.n - 1) {
                 		out << ", ";
             		}	
