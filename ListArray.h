@@ -1,8 +1,10 @@
 #include <ostream>
 #include "List.h"
 #include <exception>
+using namespace std;
+template <typename T>
 
-template <typename T> 
+i
 class ListArray : public List<T> {
 
     private:
@@ -21,19 +23,12 @@ class ListArray : public List<T> {
 		T* new_array = new T[new_size];
 		
 		for(int i=0; i<n; i++){
-			arr[i]= new_array[i];
+			 new_array[i]=arr[i];
 		}
+		delete[] arr;
 		arr = new_array;
 		max=new_size;
-		delete[] arr;
-
-		if (n == max) {
-                        max= max * 2;
-                }
-                for (int b =max;b > n; --b) {
-                         arr[b] = arr[b - 1];
-                }
-
+		
 
 	}
 
@@ -44,14 +39,23 @@ class ListArray : public List<T> {
         // miembros públicos, incluidos los heredados de List<T>
     
 	void insert(int pos, T e) override {
-        	if (pos < 0 || pos > size()-1) {
+        	if (pos < 0 || pos > n) {
             		throw std::out_of_range("Posición fuera de rango");
        		 }
+
+		if (n >= max) {
+            			resize(max * 2);
+        		}
+			for (int i = n; i > pos; --i) {
+            			arr[i] = arr[i - 1];
+        		}
+
         	arr[pos] = e;
+		n++;
     	}
 
     	void append(T e) override {
-        	insert(max-1, e);
+        	insert(n, e);
     	}
 
     	void prepend(T e) override {
@@ -59,19 +63,22 @@ class ListArray : public List<T> {
     	}
 
     	T remove(int pos) override {
-        	if (pos < 0 || pos > size()-1) {
+        	if (pos < 0 || pos >= n) {
         	    	throw std::out_of_range("Posición fuera de rango");
         	}
         	T aux  = arr[pos];
 		for(int i=pos+1; i<n-1; i++){
-			arr[i]=arr[i-1];
+			arr[i]=arr[i+1];
 		}	
-        	--max;
+        	--n;
+		if (n < max / 4 && max > MINSIZE) {
+            			resize(max / 2);
+        		}
          return aux;
    	}	
 
     	T get(int pos) override {
-        	 if (pos < 0 || pos > size()-1) {
+        	 if (pos < 0 || pos >= n) {
                         throw std::out_of_range("Posición fuera de rango");
 		}
         return arr[pos];
@@ -99,9 +106,9 @@ class ListArray : public List<T> {
 
 	ListArray(){
 		
-		 arr= new T[MINSIZE];
-		 max = MINSIZE;
-		 n = 0;
+		arr= new T[MINSIZE];
+		this-> max = MINSIZE;
+		this-> n = 0;
 	};
 	
 	~ListArray(){
@@ -109,9 +116,9 @@ class ListArray : public List<T> {
 	}
 
 
-	T& operator[](int pos){
+	T operator[](int pos){
 		
-		if(pos<0 || pos> size()-1){
+		if(pos<0 || pos>=n){
 			throw std::out_of_range("Error posición no válida");
 		}
 
@@ -127,10 +134,12 @@ class ListArray : public List<T> {
                 		out << ", ";
             		}	
         	}
-
+		out << "[";
         	return out;
 	}
 
 
 
 };
+
+#endif
